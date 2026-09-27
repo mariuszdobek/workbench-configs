@@ -1,0 +1,81 @@
+# ============================================================
+# ZLE — command-line editing
+# ============================================================
+
+# Emacs-style keybindings
+bindkey -e
+
+
+# --- Navigation ---------------------------------------------
+
+# Ctrl+A / Ctrl+E -> beginning / end of line
+bindkey '^A' beginning-of-line
+bindkey '^E' end-of-line
+
+# Option+B / Option+F -> previous / next word
+# iTerm2: Option configured as Esc+
+bindkey '^[b' backward-word
+bindkey '^[f' forward-word
+
+
+# --- Region / selection -------------------------------------
+
+# Ctrl+Space -> set mark
+# Region = text between MARK and CURSOR
+bindkey '^@' set-mark-command
+
+# Option+W -> copy region to kill ring without deleting it
+bindkey '^[w' copy-region-as-kill
+
+# Ctrl+X Ctrl+W -> kill region
+bindkey '^X^W' kill-region
+
+
+# --- Kill / Yank --------------------------------------------
+
+# Ctrl+W -> kill previous word
+bindkey '^W' backward-kill-word
+
+# Ctrl+K -> kill from cursor to end of line
+bindkey '^K' kill-line
+
+# Ctrl+U -> kill whole line
+bindkey '^U' kill-whole-line
+
+# Ctrl+Y -> yank most recent kill
+bindkey '^Y' yank
+
+# Option+Y -> replace last yank with previous kill-ring entry
+bindkey '^[y' yank-pop
+
+
+# --- Clear line WITHOUT modifying kill ring -----------------
+
+clear-line-without-kill() {
+    BUFFER=''
+    CURSOR=0
+}
+
+zle -N clear-line-without-kill
+
+# Ctrl+X Ctrl+U -> discard current command without touching kill ring
+bindkey '^X^U' clear-line-without-kill
+
+
+# --- Undo / Redo --------------------------------------------
+
+# Ctrl+_ -> undo
+bindkey '^_' undo
+
+# Ctrl+X Ctrl+_ -> redo
+bindkey '^X^_' redo
+
+
+# ============================================================
+# fzf
+# ============================================================
+
+# fzf shell integration.
+# Provides fuzzy history search on Ctrl+R.
+# Keep this after our general ZLE bindings so fzf can own Ctrl+R.
+source <(fzf --zsh)
